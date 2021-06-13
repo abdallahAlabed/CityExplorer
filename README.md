@@ -1,3 +1,42 @@
+Name of feature: get location 
+
+Estimate of time needed to complete: __1___
+
+Start time: ___7__
+
+Finish time: ___10__
+
+Actual time needed to complete: ____3_
+
+
+
+# Project Name
+
+**Author**: abdallah alabed
+**Version**: 1.0.0
+
+## Overview
+It is a website that the user can explore information about selected city and their latitude and longitude.
+
+## Getting Started
+having the link of the website.
+## Architecture
+ Netlify
+ GitHub
+React Bootsraps.
+Terminal / Ubunto
+LocationQ
+-
+## Change Log
+The application now is reach to the API information related to the cities and you can explore it now.
+
+
+## Credit and Collaborations
+Latifa Ghassan,Osama AlAli.
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
