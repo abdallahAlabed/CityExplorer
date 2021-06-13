@@ -17,7 +17,8 @@ export class Main extends Component {
   setCityname = (event) => {
     event.preventDefault()
     this.setState({
-      cityName: event.target.value
+      cityName: event.target.value,
+      notvalidCityName: false
     })
   }
   getData = async (event) => {
@@ -26,8 +27,7 @@ export class Main extends Component {
       const axiosRespond = await axios.get(`https://us1.locationiq.com/v1/search.php?key=pk.83c86caa48f11d093c8138a3a3fc4185&city=${this.state.cityName}&format=json`);
       this.setState({
         cityData: axiosRespond.data[0],
-        display: true,
-        notvalidCityName: false
+        display: true
       })
     }
     catch (error) {
@@ -48,7 +48,7 @@ export class Main extends Component {
               Explore
             </Button>
           </Form>
-          {this.state.notvalidCityName && <p>plz enter a valid city name </p> || this.state.display && 
+          {(this.state.notvalidCityName && <p>plz enter a valid city name </p> )|| (this.state.display && 
             <div>
               <p className="city1">{this.state.cityData.display_name}</p>
               <p className="city">{this.state.cityData.lat}</p>
@@ -59,7 +59,7 @@ export class Main extends Component {
                 alt=""
               />
             </div>
-          }
+          )}
         </main>
         <Footer />
       </div>
