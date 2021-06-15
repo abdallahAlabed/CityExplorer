@@ -1,63 +1,88 @@
-import React, { Component } from 'react';
-import Form from 'react-bootstrap/Form';
+import React from "react";
+import axios from "axios";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import Button from 'react-bootstrap/Button';
-import axios from 'axios';
-export class Main extends Component {
+import "bootstrap/dist/css/bootstrap.min.css";
+import AlertMessage from "./components/AlertMessage";
+import SearchForm from "./components/SearchForm";
+import Map from "./components/Map";
+import Forcast from "./components/Forcast";
+import CityData from "./components/CityData";
+
+
+class App extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
-      cityName: '',
+      cityName: "",
       cityData: {},
-      display: false,
-      notvalidCityName: false
-    }
-  }//end constructor
-  setCityname = (event) => {
-    event.preventDefault()
-    this.setState({
-      cityName: event.target.value,
-      notvalidCityName: false
-    })
+      displayData: false,
+      alert: false,
+      error: "",
+      weatherData: "",
+      lat: "",
+      lon: "",
+      error: false,
+    };
   }
-  getData = async (event) => {
-    try {
-      event.preventDefault();
-      const axiosRespond = await axios.get(`http://localhost:3030/weather?lat=-33.87&lon=151.21&searchQuery=Sydney&format=json`);
-      this.setState({
-        cityData: axiosRespond.data.data[0],
-        display: true
-      })
-      console.log(this.state.cityData);
 
+
+  updateCityNameState = (e) => {
+    this.setState({
+      cityName: e.target.value,
+    });
+  };
+
+  getCityData = async (e) => {
+
+    e.preventDefault();
+
+    try {
+      const axiosResponse = await axios.get(
+        `https://us1.locationiq.com/v1/search.php?key=pk.d36871f015649f915282f374cff76628&city=${this.state.cityName}&format=json`
+      );
+      const myApiResponse = await axios.get(
+        `${process.env.REACT_APP_URL}/weather`
+      );
+      this.setState({
+        cityData: axiosResponse.data[0],
+        weatherData: myApiResponse.data,
+        displayData: true,
+        alert: false,
+      });
+
+    } catch {
+      this.setState({
+        error: true,
+      });
     }
-    catch (error) {
-      this.setState({notvalidCityName: true })
-    }
-  }
+  };
+
+
   render() {
     return (
       <div>
         <Header />
-        <main>
-          <Form onSubmit={this.getData} >
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>City Name</Form.Label>
-              <Form.Control type="text" onChange={this.setCityname} placeholder="Enter name" />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-              Explore
-            </Button>
-          </Form>
-         
-              <p className="city">{this.state.cityData.lat}</p>
-              <p className="city">{this.state.cityData.lon}</p>
-        
-        </main>
+
+        <SearchForm
+          getCityData={this.getCityData}
+          updateCityNameState={this.updateCityNameState}
+        />
+
+        {(this.state.error && <AlertMessage />) ||
+          (this.state.displayData && (
+            <div>
+              <Map cityData={this.state.cityData} />
+              <CityData cityData={this.state.cityData} />
+              <Forcast weather={this.state.weatherData} />
+            </div>
+          ))}
+
         <Footer />
+
       </div>
-    )
+    );
   }
 }
-export default Main
+export default App;
