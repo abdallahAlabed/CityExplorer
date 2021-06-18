@@ -29,7 +29,6 @@ class App extends React.Component {
     this.setState({
       cityName: e.target.value,
     });
-    console.log(this.state.cityName);
   };
 
   getCityData = async (e) => {
@@ -40,7 +39,6 @@ class App extends React.Component {
       const axiosResponse = await axios.get(
         `https://us1.locationiq.com/v1/search.php?key=pk.83c86caa48f11d093c8138a3a3fc4185&city=${this.state.cityName}&format=json`
       );
-      console.log(axiosResponse);
 
       this.setState({
         cityData: axiosResponse.data[0],
@@ -61,7 +59,6 @@ class App extends React.Component {
       this.setState({
         error: true,
       });
-      console.log("btata");
     }
   };
 
