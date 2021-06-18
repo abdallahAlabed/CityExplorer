@@ -18,8 +18,6 @@ class App extends React.Component {
       cityName: "",
       cityData: {},
       displayData: false,
-      alert: false,
-      error: "",
       weatherData: "",
       lat: "",
       lon: "",
@@ -44,18 +42,20 @@ class App extends React.Component {
       );
       console.log(axiosResponse);
 
-      // const myApiResponse = await axios.get(
-      //   `${process.env.REACT_APP_URL}/weather`
-      // );
-      console.log(this.state.cityData);
-
       this.setState({
         cityData: axiosResponse.data[0],
-        // weatherData: myApiResponse.data,
-        displayData: true,
-        alert: false,
+        lat: axiosResponse.data[0].lat,
+        lon: axiosResponse.data[0].lon,
+        error: false,
+         
       });
-      
+      const myApiResponse = await axios.get(
+        `${process.env.REACT_APP_URL}/weather?lon=${this.state.lon}&lat=${this.state.lat}`
+      );
+      this.setState({
+        weatherData: myApiResponse.data,
+        displayData: true,
+      });
 
     } catch {
       this.setState({
@@ -79,11 +79,12 @@ class App extends React.Component {
         {(this.state.error && <AlertMessage />) ||
           (this.state.displayData && (
             <div>
-              <Map 
-              cityData={this.state.cityData} />
+              <Map
+                cityData={this.state.cityData} />
               <CityData
-               cityData={this.state.cityData} />
-              {/* <Forcast weather={this.state.weatherData} /> */}
+                cityData={this.state.cityData} />
+              <Forcast 
+              weather={this.state.weatherData} />
             </div>
           ))}
 
