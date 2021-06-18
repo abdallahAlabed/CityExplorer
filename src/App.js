@@ -8,7 +8,7 @@ import SearchForm from "./components/SearchForm";
 import Map from "./components/Map";
 import Forcast from "./components/Forcast";
 import CityData from "./components/CityData";
-
+import weatherData from "./assets/weather.json"
 
 class App extends React.Component {
 
@@ -27,11 +27,11 @@ class App extends React.Component {
     };
   }
 
-
   updateCityNameState = (e) => {
     this.setState({
       cityName: e.target.value,
     });
+    console.log(this.state.cityName);
   };
 
   getCityData = async (e) => {
@@ -40,22 +40,28 @@ class App extends React.Component {
 
     try {
       const axiosResponse = await axios.get(
-        `https://us1.locationiq.com/v1/search.php?key=pk.d36871f015649f915282f374cff76628&city=${this.state.cityName}&format=json`
+        `https://us1.locationiq.com/v1/search.php?key=pk.83c86caa48f11d093c8138a3a3fc4185&city=${this.state.cityName}&format=json`
       );
-      const myApiResponse = await axios.get(
-        `${process.env.REACT_APP_URL}/weather`
-      );
+      console.log(axiosResponse);
+
+      // const myApiResponse = await axios.get(
+      //   `${process.env.REACT_APP_URL}/weather`
+      // );
+      console.log(this.state.cityData);
+
       this.setState({
         cityData: axiosResponse.data[0],
-        weatherData: myApiResponse.data,
+        // weatherData: myApiResponse.data,
         displayData: true,
         alert: false,
       });
+      
 
     } catch {
       this.setState({
         error: true,
       });
+      console.log("btata");
     }
   };
 
@@ -73,9 +79,11 @@ class App extends React.Component {
         {(this.state.error && <AlertMessage />) ||
           (this.state.displayData && (
             <div>
-              <Map cityData={this.state.cityData} />
-              <CityData cityData={this.state.cityData} />
-              <Forcast weather={this.state.weatherData} />
+              <Map 
+              cityData={this.state.cityData} />
+              <CityData
+               cityData={this.state.cityData} />
+              {/* <Forcast weather={this.state.weatherData} /> */}
             </div>
           ))}
 
